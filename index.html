@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>WaferVision — AI-Driven Defect Detection in Semiconductor Wafer Inspection</title>
+  <meta name="description"
+    content="WaferVision uses deep learning models (ResNet18 & Ensemble) to detect 9 types of semiconductor wafer defects with 98.07% accuracy. Real-time inspection, batch processing, and intelligent alerting.">
+  <meta name="keywords"
+    content="semiconductor, wafer inspection, defect detection, AI, deep learning, ResNet18, EfficientNet, DenseNet, WM-811K">
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="WaferVision — AI-Driven Wafer Defect Detection">
+  <meta property="og:description"
+    content="Deep learning system detecting 9 semiconductor wafer defect types with 98.07% accuracy. Powered by ResNet18 & Ensemble models.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#06080f">
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <!-- KaTeX for beautiful math equations in chatbot (EagleSpark.ai-like) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <!-- Prism.js for syntax highlighting in chatbot code blocks -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔬</text></svg>">
+</head>
+
+<body class="page-loading">
+  <!-- SCROLL PROGRESS BAR (Feature 9) -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+  </div>
+
+  <!-- CURSOR GLOW (Feature 11) -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="16" stroke="url(#g1)" stroke-width="2.5" />
+          <circle cx="18" cy="18" r="8" stroke="url(#g1)" stroke-width="2" />
+          <circle cx="18" cy="18" r="3" fill="#6366f1" />
+          <line x1="18" y1="2" x2="18" y2="10" stroke="#3b82f6" stroke-width="1.5" />
+          <line x1="18" y1="26" x2="18" y2="34" stroke="#3b82f6" stroke-width="1.5" />
+          <line x1="2" y1="18" x2="10" y2="18" stroke="#3b82f6" stroke-width="1.5" />
+          <line x1="26" y1="18" x2="34" y2="18" stroke="#3b82f6" stroke-width="1.5" />
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="36" y2="36">
+              <stop stop-color="#3b82f6" />
+              <stop offset="1" stop-color="#8b5cf6" />
+            </linearGradient>
+          </defs>
+        </svg>
+        WaferVision
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">Process</a>
+        <a href="#models">Models</a>
+        <a href="#dataset">Dataset</a>
+        <a href="#demo">Demo</a>
+        <a href="#performance">Performance</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        <a href="#demo" class="btn btn-primary" style="padding:8px 18px;font-size:.82rem">Launch App</a>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#features" onclick="closeMobile()">Features</a>
+    <a href="#how-it-works" onclick="closeMobile()">Process</a>
+    <a href="#models" onclick="closeMobile()">Models</a>
+    <a href="#dataset" onclick="closeMobile()">Dataset</a>
+    <a href="#demo" onclick="closeMobile()">Demo</a>
+    <a href="#performance" onclick="closeMobile()">Performance</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"><img src="assets/images/hero_wafer.png" alt="Semiconductor wafer inspection background"></div>
+    <canvas id="particleCanvas" style="position:absolute;inset:0;z-index:1;pointer-events:none"></canvas>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge"><span class="dot"></span> AI-Powered Inspection System</div>
+        <h1>Intelligent <span class="gradient-text">Wafer Defect</span> Detection System</h1>
+        <p>Leveraging deep learning with ResNet18 and our Ensemble model to achieve <strong>98.07% accuracy</strong> in
+          detecting 9 types of semiconductor wafer defects. Real-time inspection, automated alerts, and comprehensive
+          analytics — all in one platform.</p>
+        <div class="hero-buttons">
+          <a href="#demo" class="btn btn-primary">🔬 Explore Demo</a>
+          <a href="#how-it-works" class="btn btn-outline">Learn How It Works →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num hero-counter" data-target="98.07" data-suffix="%" data-decimals="2">0</div>
+            <div class="label">Detection Accuracy</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num hero-counter" data-target="811" data-suffix="K+" data-decimals="0">0</div>
+            <div class="label">Wafer Maps Trained</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num hero-counter" data-target="9" data-decimals="0">0</div>
+            <div class="label">Defect Classes</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num hero-counter" data-target="50" data-prefix="<" data-suffix="ms" data-decimals="0">0</div>
+            <div class="label">Inference Speed</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="assets/images/dashboard_preview.png" alt="WaferVision Dashboard Preview"
+          style="max-width:620px;width:100%">
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section id="tech-stack" class="tech-stack-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🛠️ Technology</div>
+        <h2 class="section-title">Built <span class="gradient-text">With</span></h2>
+        <p class="section-desc">The cutting-edge technologies powering WaferVision's intelligent inspection pipeline.
+        </p>
+      </div>
+      <div class="tech-grid reveal">
+
+        <div class="tech-card" data-tech="Python">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <linearGradient id="pyG1" x1="70.252" x2="170.659" y1="1237.476" y2="1151.089"
+                gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#5A9FD4" />
+                <stop offset="1" stop-color="#306998" />
+              </linearGradient>
+              <linearGradient id="pyG2" x1="209.474" x2="130.27" y1="1098.811" y2="1170.575"
+                gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FFD43B" />
+                <stop offset="1" stop-color="#FFE873" />
+              </linearGradient>
+              <path fill="url(#pyG1)"
+                d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" />
+              <path fill="url(#pyG2)"
+                d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" />
+            </svg>
+          </div>
+          <span class="tech-name">Python</span>
+          <span class="tech-role">Core Language</span>
+        </div>
+
+        <div class="tech-card" data-tech="PyTorch">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <path fill="#EE4C2C"
+                d="M62.807 0L25.238 37.57c-20.72 20.72-20.72 54.28 0 74.999 20.72 20.72 54.28 20.72 75 0 20.72-20.72 20.72-54.28 0-75l-9.33 9.33c15.533 15.534 15.533 40.808 0 56.341-15.534 15.534-40.808 15.534-56.342 0-15.533-15.533-15.533-40.807 0-56.341l28.24-28.24 5.348-5.348V0zM79.837 21.627c-3.726 0-6.75 3.023-6.75 6.75 0 3.726 3.024 6.75 6.75 6.75 3.727 0 6.75-3.024 6.75-6.75 0-3.727-3.023-6.75-6.75-6.75z" />
+            </svg>
+          </div>
+          <span class="tech-name">PyTorch</span>
+          <span class="tech-role">Deep Learning</span>
+        </div>
+
+        <div class="tech-card" data-tech="Streamlit">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <path fill="#FF4B4B" d="M64 8L16 40v48l48 32 48-32V40L64 8zm0 12l36 24v36L64 104 28 80V44l36-24z" />
+              <path fill="#FF4B4B" d="M64 36L40 52v24l24 16 24-16V52L64 36z" />
+            </svg>
+          </div>
+          <span class="tech-name">Streamlit</span>
+          <span class="tech-role">Web Framework</span>
+        </div>
+
+        <div class="tech-card" data-tech="OpenCV">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <circle cx="64" cy="34" r="22" fill="#FF0000" opacity=".85" />
+              <circle cx="40" cy="82" r="22" fill="#00AA00" opacity=".85" />
+              <circle cx="88" cy="82" r="22" fill="#0055FF" opacity=".85" />
+            </svg>
+          </div>
+          <span class="tech-name">OpenCV</span>
+          <span class="tech-role">Image Processing</span>
+        </div>
+
+        <div class="tech-card" data-tech="ResNet18">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <rect x="14" y="20" width="100" height="88" rx="12" fill="none" stroke="#8B5CF6" stroke-width="4" />
+              <line x1="14" y1="44" x2="114" y2="44" stroke="#8B5CF6" stroke-width="2" opacity=".5" />
+              <line x1="14" y1="64" x2="114" y2="64" stroke="#8B5CF6" stroke-width="2" opacity=".5" />
+              <line x1="14" y1="84" x2="114" y2="84" stroke="#8B5CF6" stroke-width="2" opacity=".5" />
+              <circle cx="64" cy="54" r="6" fill="#8B5CF6" />
+              <circle cx="44" cy="74" r="6" fill="#6366F1" />
+              <circle cx="84" cy="74" r="6" fill="#6366F1" />
+              <line x1="64" y1="54" x2="44" y2="74" stroke="#7C3AED" stroke-width="2" />
+              <line x1="64" y1="54" x2="84" y2="74" stroke="#7C3AED" stroke-width="2" />
+              <path d="M32 30h14v8H32z" fill="#8B5CF6" rx="2" /><text x="64" y="104" text-anchor="middle" fill="#8B5CF6"
+                font-size="11" font-weight="700">18</text>
+            </svg>
+          </div>
+          <span class="tech-name">ResNet18</span>
+          <span class="tech-role">CNN Architecture</span>
+        </div>
+
+        <div class="tech-card" data-tech="CBAM">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <rect x="20" y="30" width="88" height="68" rx="10" fill="none" stroke="#F59E0B" stroke-width="3.5" />
+              <ellipse cx="64" cy="64" rx="28" ry="18" fill="none" stroke="#F59E0B" stroke-width="2.5" />
+              <circle cx="64" cy="64" r="6" fill="#F59E0B" />
+              <line x1="36" y1="46" x2="36" y2="82" stroke="#F59E0B" stroke-width="2" opacity=".4" />
+              <line x1="92" y1="46" x2="92" y2="82" stroke="#F59E0B" stroke-width="2" opacity=".4" />
+              <path d="M50 40l14 8-14 8z" fill="#F59E0B" opacity=".5" />
+              <path d="M78 72l-14 8 14 8z" fill="#F59E0B" opacity=".5" />
+            </svg>
+          </div>
+          <span class="tech-name">CBAM</span>
+          <span class="tech-role">Attention Module</span>
+        </div>
+
+        <div class="tech-card" data-tech="SQLite">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <path fill="#0F80CC" d="M96 24c0-8.8-14.3-16-32-16S32 15.2 32 24v80c0 8.8 14.3 16 32 16s32-7.2 32-16V24z"
+                opacity=".15" />
+              <ellipse cx="64" cy="24" rx="32" ry="16" fill="none" stroke="#0F80CC" stroke-width="4" />
+              <path d="M32 24v80c0 8.8 14.3 16 32 16s32-7.2 32-16V24" fill="none" stroke="#0F80CC" stroke-width="4" />
+              <ellipse cx="64" cy="52" rx="32" ry="10" fill="none" stroke="#0F80CC" stroke-width="2" opacity=".4" />
+              <ellipse cx="64" cy="76" rx="32" ry="10" fill="none" stroke="#0F80CC" stroke-width="2" opacity=".4" />
+            </svg>
+          </div>
+          <span class="tech-name">SQLite</span>
+          <span class="tech-role">Database</span>
+        </div>
+
+        <div class="tech-card" data-tech="Grad-CAM">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <rect x="24" y="24" width="80" height="80" rx="8" fill="none" stroke="#EF4444" stroke-width="3" />
+              <circle cx="52" cy="52" r="16" fill="#EF4444" opacity=".3" />
+              <circle cx="52" cy="52" r="10" fill="#F59E0B" opacity=".4" />
+              <circle cx="52" cy="52" r="5" fill="#EF4444" opacity=".7" />
+              <circle cx="80" cy="72" r="10" fill="#3B82F6" opacity=".25" />
+              <rect x="68" y="30" width="30" height="4" rx="2" fill="#EF4444" opacity=".5" />
+              <rect x="68" y="38" width="22" height="4" rx="2" fill="#F59E0B" opacity=".4" />
+              <rect x="68" y="46" width="16" height="4" rx="2" fill="#3B82F6" opacity=".3" />
+            </svg>
+          </div>
+          <span class="tech-name">Grad-CAM</span>
+          <span class="tech-role">Explainability</span>
+        </div>
+
+        <div class="tech-card" data-tech="EfficientNet">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <polygon points="64,16 108,40 108,88 64,112 20,88 20,40" fill="none" stroke="#10B981"
+                stroke-width="3.5" />
+              <polygon points="64,32 92,48 92,80 64,96 36,80 36,48" fill="none" stroke="#10B981" stroke-width="2"
+                opacity=".5" />
+              <circle cx="64" cy="64" r="10" fill="#10B981" opacity=".3" />
+              <circle cx="64" cy="64" r="4" fill="#10B981" />
+            </svg>
+          </div>
+          <span class="tech-name">EfficientNet</span>
+          <span class="tech-role">Model B0</span>
+        </div>
+
+        <div class="tech-card" data-tech="DenseNet">
+          <div class="tech-icon">
+            <svg viewBox="0 0 128 128">
+              <circle cx="64" cy="28" r="8" fill="#06B6D4" />
+              <circle cx="36" cy="56" r="8" fill="#06B6D4" opacity=".7" />
+              <circle cx="92" cy="56" r="8" fill="#06B6D4" opacity=".7" />
+              <circle cx="44" cy="84" r="8" fill="#06B6D4" opacity=".5" />
+              <circle cx="84" cy="84" r="8" fill="#06B6D4" opacity=".5" />
+              <circle cx="64" cy="104" r="8" fill="#06B6D4" opacity=".4" />
+              <line x1="64" y1="28" x2="36" y2="56" stroke="#06B6D4" stroke-width="2" opacity=".4" />
+              <line x1="64" y1="28" x2="92" y2="56" stroke="#06B6D4" stroke-width="2" opacity=".4" />
+              <line x1="36" y1="56" x2="44" y2="84" stroke="#06B6D4" stroke-width="2" opacity=".3" />
+              <line x1="36" y1="56" x2="84" y2="84" stroke="#06B6D4" stroke-width="2" opacity=".2" />
+              <line x1="92" y1="56" x2="84" y2="84" stroke="#06B6D4" stroke-width="2" opacity=".3" />
+              <line x1="92" y1="56" x2="44" y2="84" stroke="#06B6D4" stroke-width="2" opacity=".2" />
+              <line x1="44" y1="84" x2="64" y2="104" stroke="#06B6D4" stroke-width="2" opacity=".3" />
+              <line x1="84" y1="84" x2="64" y2="104" stroke="#06B6D4" stroke-width="2" opacity=".3" />
+            </svg>
+          </div>
+          <span class="tech-name">DenseNet</span>
+          <span class="tech-role">Model 121</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">⚡ Core Capabilities</div>
+        <h2 class="section-title">Powerful Features for <span class="gradient-text">Complete Inspection</span></h2>
+        <p class="section-desc">From single-image analysis to live camera detection, WaferVision provides end-to-end
+          semiconductor quality control.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(0); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">🔍</div>
+            <h3>Single Image Detection</h3>
+            <p>Upload any wafer image and instantly identify the exact defect type with confidence scores and probability
+              distribution across all 9 defect classes.</p>
+          </div>
+          <span class="card-link">Launch Live Demo &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(1); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">📦</div>
+            <h3>Batch Processing</h3>
+            <p>Process hundreds of wafer images simultaneously. Upload multiple files at once and receive comprehensive
+              defect analysis for the entire batch in seconds.</p>
+          </div>
+          <span class="card-link">Launch Batch Scanner &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(2); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">📷</div>
+            <h3>Live Camera Detection</h3>
+            <p>Connect an external microscope for real-time wafer inspection. The system continuously monitors and detects
+              defects as wafers pass through the inspection line.</p>
+          </div>
+          <span class="card-link">Launch Camera Stream &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(3); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">📊</div>
+            <h3>Inspection History &amp; Analytics</h3>
+            <p>Complete inspection database with total inspections, defective counts, normal counts, and defect rates.
+              Daily trend analysis through interactive graph visualization.</p>
+          </div>
+          <span class="card-link">Launch Analytics &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(4); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">🔔</div>
+            <h3>Smart Alert System</h3>
+            <p>Automatic email alerts when defects are detected during live inspection. Full alert history with total
+              alerts, success/failure tracking, and exportable CSV reports.</p>
+          </div>
+          <span class="card-link">Configure Alerts &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(0); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">🧠</div>
+            <h3>Model Selection</h3>
+            <p>Choose between ResNet18 for speed or the Ensemble model (ResNet18+CBAM + EfficientNet-B0 + DenseNet121) for
+              maximum accuracy based on your inspection needs.</p>
+          </div>
+          <span class="card-link">Change Models &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(0); } else { window.location.hash='#app-preview'; }">
+          <div>
+            <div class="feature-icon">🗺️</div>
+            <h3>Defect Localization Heatmap</h3>
+            <p>Visualize exact defect locations with Grad-CAM heatmaps. Red/Yellow highlights defect regions, Blue
+              indicates normal areas. Downloadable as PDF inspection reports.</p>
+          </div>
+          <span class="card-link">View Grad-CAM &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="const contactEl = document.getElementById('contact'); if(contactEl) { contactEl.scrollIntoView({ behavior: 'smooth' }); }">
+          <div>
+            <div class="feature-icon">🔐</div>
+            <h3>Secure Authentication</h3>
+            <p>Enterprise-grade user management with bcrypt-hashed passwords, secure session handling, and role-based
+              access control. Your inspection data stays protected.</p>
+          </div>
+          <span class="card-link">Contact Sales &rarr;</span>
+        </div>
+        <div class="feature-card reveal" onclick="if(window.toggleChatbot) { toggleChatbot(); }">
+          <div>
+            <div class="feature-icon">🤖</div>
+            <h3>EagleSpark.ai Assistant</h3>
+            <p>24/7 AI-powered support assistant trained on the entire platform. Get instant answers to complex questions
+              about wafer inspection, defect types, and system operations.</p>
+          </div>
+          <span class="card-link">Launch Assistant &rarr;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" style="background:var(--bg2)">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🔄 Workflow</div>
+        <h2 class="section-title">How <span class="gradient-text">WaferVision</span> Works</h2>
+        <p class="section-desc">A streamlined six-step process from wafer image capture to actionable inspection
+          reports.</p>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3>Image Acquisition</h3>
+            <p>Wafer images are captured via file upload, batch upload, or live camera feed connected to an external
+              microscope. The system accepts standard wafer map formats and real-time video streams.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3>Preprocessing &amp; Enhancement</h3>
+            <p>Images undergo normalization, resizing, and augmentation pipelines. OpenCV processes the raw wafer maps
+              to ensure optimal input quality for the neural network models.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3>Model Inference</h3>
+            <p>The selected model (ResNet18 or Ensemble) performs forward-pass inference. The Ensemble model combines
+              ResNet18+CBAM, EfficientNet-B0, and DenseNet121 predictions through weighted averaging for maximum
+              accuracy.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <h3>Defect Classification &amp; Probability Analysis</h3>
+            <p>The model outputs class probabilities across all 9 defect categories. The highest probability class is
+              selected as the detected defect, with confidence values displayed (e.g., Donut: 98%, Loc: 2%).</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">05</div>
+          <div class="step-content">
+            <h3>Heatmap Generation &amp; Localization</h3>
+            <p>Grad-CAM generates defect localization heatmaps showing exactly where the defect occurs. Red/Yellow
+              regions indicate defect locations, while Blue regions indicate normal areas.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">06</div>
+          <div class="step-content">
+            <h3>Alert, Report &amp; Archive</h3>
+            <p>If a defect is found and email alerts are enabled, the system sends an immediate notification to the
+              user. Results are saved to the inspection history database and a downloadable PDF report is generated.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE DIAGRAM (Feature 12) -->
+  <section id="architecture">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🏗️ System Design</div>
+        <h2 class="section-title">ML Pipeline <span class="gradient-text">Architecture</span></h2>
+        <p class="section-desc">End-to-end system architecture showing how WaferVision processes wafer images from input
+          to actionable output.</p>
+      </div>
+      <div class="arch-pipeline reveal" id="archPipeline">
+        <!-- Stage 1: Image Input -->
+        <div class="arch-stage" data-stage="0">
+          <div class="arch-icon-wrap">
+            <div class="arch-icon">📷</div>
+            <div class="arch-pulse-ring"></div>
+          </div>
+          <div class="arch-label">Image Input</div>
+          <div class="arch-sublabel">Upload / Camera / Batch</div>
+        </div>
+        <div class="arch-arrow"><svg viewBox="0 0 40 20" width="40" height="20">
+            <path d="M0 10 L30 10 M24 4 L32 10 L24 16" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg></div>
+        <!-- Stage 2: Preprocessing -->
+        <div class="arch-stage" data-stage="1">
+          <div class="arch-icon-wrap">
+            <div class="arch-icon">⚙️</div>
+            <div class="arch-pulse-ring"></div>
+          </div>
+          <div class="arch-label">Preprocessing</div>
+          <div class="arch-sublabel">Resize · Normalize · Augment</div>
+        </div>
+        <div class="arch-arrow"><svg viewBox="0 0 40 20" width="40" height="20">
+            <path d="M0 10 L30 10 M24 4 L32 10 L24 16" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg></div>
+        <!-- Stage 3: Model Inference -->
+        <div class="arch-stage" data-stage="2">
+          <div class="arch-icon-wrap">
+            <div class="arch-icon">🧠</div>
+            <div class="arch-pulse-ring"></div>
+          </div>
+          <div class="arch-label">Model Inference</div>
+          <div class="arch-sublabel">ResNet18 / Ensemble</div>
+        </div>
+        <div class="arch-arrow"><svg viewBox="0 0 40 20" width="40" height="20">
+            <path d="M0 10 L30 10 M24 4 L32 10 L24 16" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg></div>
+        <!-- Stage 4: Classification -->
+        <div class="arch-stage" data-stage="3">
+          <div class="arch-icon-wrap">
+            <div class="arch-icon">📊</div>
+            <div class="arch-pulse-ring"></div>
+          </div>
+          <div class="arch-label">Classification</div>
+          <div class="arch-sublabel">9-Class Probabilities</div>
+        </div>
+        <div class="arch-arrow"><svg viewBox="0 0 40 20" width="40" height="20">
+            <path d="M0 10 L30 10 M24 4 L32 10 L24 16" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg></div>
+        <!-- Stage 5: Heatmap -->
+        <div class="arch-stage" data-stage="4">
+          <div class="arch-icon-wrap">
+            <div class="arch-icon">🗺️</div>
+            <div class="arch-pulse-ring"></div>
+          </div>
+          <div class="arch-label">Grad-CAM Heatmap</div>
+          <div class="arch-sublabel">Defect Localization</div>
+        </div>
+        <div class="arch-arrow"><svg viewBox="0 0 40 20" width="40" height="20">
+            <path d="M0 10 L30 10 M24 4 L32 10 L24 16" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg></div>
+        <!-- Stage 6: Alert & Report -->
+        <div class="arch-stage" data-stage="5">
+          <div class="arch-icon-wrap">
+            <div class="arch-icon">🔔</div>
+            <div class="arch-pulse-ring"></div>
+          </div>
+          <div class="arch-label">Alert & Report</div>
+          <div class="arch-sublabel">Email · PDF · Database</div>
+        </div>
+      </div>
+      <!-- Detail cards row -->
+      <div class="arch-details reveal" id="archDetails">
+        <div class="arch-detail-card">
+          <div class="adc-icon">📷</div>
+          <h4>Input Layer</h4>
+          <p>Supports single image upload, batch ZIP files, and live camera feed via OpenCV VideoCapture.</p>
+        </div>
+        <div class="arch-detail-card">
+          <div class="adc-icon">⚙️</div>
+          <h4>Preprocessing</h4>
+          <p>Images resized to 224×224, normalized with ImageNet mean/std, with optional augmentation for training.</p>
+        </div>
+        <div class="arch-detail-card">
+          <div class="adc-icon">🧠</div>
+          <h4>Inference Engine</h4>
+          <p>PyTorch forward pass with GPU acceleration. Ensemble uses weighted average of 3 model predictions + CBAM
+            attention.</p>
+        </div>
+        <div class="arch-detail-card">
+          <div class="adc-icon">📊</div>
+          <h4>Classifier Head</h4>
+          <p>Softmax output across 9 defect classes. Argmax selects prediction; full probability distribution displayed.
+          </p>
+        </div>
+        <div class="arch-detail-card">
+          <div class="adc-icon">🗺️</div>
+          <h4>Explainability</h4>
+          <p>Grad-CAM hooks into final conv layer to generate spatial heatmaps showing where the model "looks."</p>
+        </div>
+        <div class="arch-detail-card">
+          <div class="adc-icon">🔔</div>
+          <h4>Output Layer</h4>
+          <p>SMTP email alerts, ReportLab PDF generation, SQLite inspection history, and CSV export support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODELS -->
+  <section id="models">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🧠 Deep Learning</div>
+        <h2 class="section-title">Trained <span class="gradient-text">Detection Models</span></h2>
+        <p class="section-desc">Two powerful models trained on the complete WM-811K dataset, optimized for semiconductor
+          defect classification.</p>
+      </div>
+      <div class="models-grid">
+        <div class="model-card featured reveal">
+          <div class="model-name">ResNet18</div>
+          <div class="model-sub">High-Accuracy Single-Architecture Model</div>
+          <div class="model-stat"><span class="label">Architecture</span><span class="value">ResNet-18 (18
+              layers)</span></div>
+          <div class="model-stat"><span class="label">Training Data</span><span class="value">WM-811K Full
+              Dataset</span></div>
+          <div class="model-stat"><span class="label">Defect Classes</span><span class="value">9 Classes</span></div>
+          <div class="model-stat"><span class="label">Best For</span><span class="value">Speed-Critical
+              Inspection</span></div>
+          <div class="model-stat"><span class="label">Inference</span><span class="value">Ultra-Fast (CPU/GPU)</span>
+          </div>
+          <div class="accuracy-bar">
+            <div class="accuracy-fill" data-width="98"
+              style="width:0;background:linear-gradient(90deg,#10b981,#3b82f6,#8b5cf6)"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.8rem;color:var(--text3)">
+            <span>Accuracy</span><span style="font-weight:700;color:var(--success)">98.07%</span>
+          </div>
+        </div>
+        <div class="model-card reveal">
+          <div class="model-name">Ensemble Model</div>
+          <div class="model-sub">ResNet18+CBAM + EfficientNet-B0 + DenseNet121</div>
+          <div class="model-stat"><span class="label">Architecture</span><span class="value">3-Model Ensemble +
+              CBAM</span></div>
+          <div class="model-stat"><span class="label">Training Data</span><span class="value">WM-811K Full
+              Dataset</span></div>
+          <div class="model-stat"><span class="label">Defect Classes</span><span class="value">9 Classes</span></div>
+          <div class="model-stat"><span class="label">Best For</span><span class="value">Maximum Accuracy</span></div>
+          <div class="model-stat"><span class="label">Attention</span><span class="value">CBAM (Channel +
+              Spatial)</span></div>
+          <div class="accuracy-bar">
+            <div class="accuracy-fill" data-width="98" style="width:0"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.8rem;color:var(--text3)">
+            <span>Accuracy</span><span style="font-weight:700;color:var(--text)">98.06%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE/AFTER COMPARISON SLIDER -->
+  <section id="comparison" style="background:var(--bg2)">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🔬 Visual AI Output</div>
+        <h2 class="section-title">Before & <span class="gradient-text">After</span> Analysis</h2>
+        <p class="section-desc">Drag the slider to compare original wafer images with Grad-CAM defect localization
+          heatmaps generated by our AI models.</p>
+      </div>
+      <div class="comparison-wrapper reveal">
+        <div class="comparison-slider" id="comparisonSlider">
+          <canvas id="compBefore" class="comp-canvas"></canvas>
+          <div class="comp-overlay" id="compOverlay">
+            <canvas id="compAfter" class="comp-canvas"></canvas>
+          </div>
+          <div class="comp-handle" id="compHandle">
+            <div class="comp-handle-line"></div>
+            <div class="comp-handle-circle">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2.5"
+                stroke-linecap="round">
+                <polyline points="9,6 4,12 9,18" />
+                <polyline points="15,6 20,12 15,18" />
+              </svg>
+            </div>
+            <div class="comp-handle-line"></div>
+          </div>
+          <div class="comp-label comp-label-left">Original Wafer</div>
+          <div class="comp-label comp-label-right">Grad-CAM Heatmap</div>
+        </div>
+        <div class="comparison-defect-picker">
+          <span class="comp-picker-label">Defect Type:</span>
+          <button class="comp-defect-btn active" data-defect="0">🎯 Center</button>
+          <button class="comp-defect-btn" data-defect="1">🍩 Donut</button>
+          <button class="comp-defect-btn" data-defect="2">📍 Edge-Loc</button>
+          <button class="comp-defect-btn" data-defect="3">💍 Edge-Ring</button>
+          <button class="comp-defect-btn" data-defect="7">✏️ Scratch</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATASET -->
+  <section id="dataset" class="dataset-section" style="background:var(--bg2)">
+    <div class="container">
+      <div class="reveal">
+        <img src="assets/images/wafer_defects.png" alt="9 types of wafer defect patterns from WM-811K dataset"
+          class="dataset-img">
+      </div>
+      <div class="reveal">
+        <div class="section-badge">📊 Training Data</div>
+        <h2 class="section-title">WM-811K <span class="gradient-text">Dataset</span></h2>
+        <p class="section-desc">Our models are trained on the industry-standard WM-811K dataset containing 811,457
+          real-world semiconductor wafer maps across 9 defect categories.</p>
+        <!-- Interactive Defect Gallery (Feature 8) -->
+        <div class="defect-gallery" id="defectGallery">
+          <!-- Cards populated by JS -->
+        </div>
+
+        <!-- Defect Detail Panel -->
+        <div class="defect-detail-panel" id="defectDetailPanel">
+          <button class="ddp-close" id="ddpClose" aria-label="Close detail">&times;</button>
+          <div class="ddp-content">
+            <div class="ddp-visual">
+              <canvas id="ddpCanvas" width="240" height="240"></canvas>
+            </div>
+            <div class="ddp-info">
+              <div class="ddp-badge" id="ddpBadge"></div>
+              <h3 class="ddp-title" id="ddpTitle"></h3>
+              <p class="ddp-desc" id="ddpDesc"></p>
+              <div class="ddp-chars" id="ddpChars"></div>
+              <div class="ddp-stats" id="ddpStats"></div>
+            </div>
+          </div>
+        </div>
+        <div class="dataset-stat-grid">
+          <div class="ds-stat">
+            <div class="num">811,457</div>
+            <div class="label">Total Wafer Maps</div>
+          </div>
+          <div class="ds-stat">
+            <div class="num">9</div>
+            <div class="label">Defect Classes</div>
+          </div>
+          <div class="ds-stat">
+            <div class="num">98.07%</div>
+            <div class="label">Best Accuracy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section id="demo">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🚀 Interactive Preview</div>
+        <h2 class="section-title">Live <span class="gradient-text">Detection Demo</span></h2>
+        <p class="section-desc">Experience the WaferVision detection pipeline. Upload a wafer image to see real-time
+          defect classification and heatmap analysis.</p>
+      </div>
+      <div class="demo-preview reveal">
+        <div class="demo-topbar">
+          <div class="demo-dot r"></div>
+          <div class="demo-dot y"></div>
+          <div class="demo-dot g"></div>
+          <span style="margin-left:12px;font-size:.8rem;color:var(--text3)">WaferVision — Single Image Detection</span>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <select id="modelSelect"
+              style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:4px 10px;border-radius:6px;font-size:.75rem;font-family:inherit;cursor:pointer">
+              <option value="resnet18">ResNet18 (98.07%)</option>
+              <option value="ensemble">Ensemble (98.06%)</option>
+            </select>
+          </div>
+        </div>
+        <div class="demo-body">
+          <div class="demo-upload" id="demoUpload">
+            <div class="icon">📤</div>
+            <p><strong>Drop wafer image here</strong></p>
+            <p class="small">or click to browse • PNG, JPG, BMP supported</p>
+            <input type="file" id="demoFileInput" accept="image/*" style="display:none">
+          </div>
+          <div class="demo-results" id="demoResults">
+            <div class="demo-result-card">
+              <h4>🎯 Detection Result</h4>
+              <div id="detectionResult" style="font-size:1.3rem;font-weight:800;color:var(--success)">Awaiting image...
+              </div>
+              <div id="confidenceVal" style="font-size:.85rem;color:var(--text2);margin-top:4px"></div>
+            </div>
+            <div class="demo-result-card">
+              <h4>📊 Class Probabilities</h4>
+              <div id="probBars"></div>
+            </div>
+            <div class="demo-result-card" id="heatmapCard" style="display:none">
+              <h4>🗺️ Defect Localization</h4>
+              <div style="display:flex;gap:12px">
+                <div style="flex:1;text-align:center"><canvas id="originalCanvas" width="120" height="120"
+                    style="border-radius:8px;border:1px solid var(--border);width:100%;max-width:140px"></canvas>
+                  <div style="font-size:.7rem;color:var(--text3);margin-top:4px">Original</div>
+                </div>
+                <div style="flex:1;text-align:center"><canvas id="heatmapCanvas" width="120" height="120"
+                    style="border-radius:8px;border:1px solid var(--border);width:100%;max-width:140px"></canvas>
+                  <div style="font-size:.7rem;color:var(--text3);margin-top:4px">🔴 Defect | 🔵 Normal</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO DEMO / ANIMATED PREVIEW (Feature 6) -->
+  <section id="app-preview" style="background:var(--bg2)">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">🎬 Live Preview</div>
+        <h2 class="section-title">See It <span class="gradient-text">In Action</span></h2>
+        <p class="section-desc">Watch the WaferVision detection pipeline in real-time — from image upload to defect
+          classification and Grad-CAM heatmap generation.</p>
+      </div>
+      <div class="app-demo-container reveal">
+        <div class="app-demo-window" id="appDemoWindow">
+          <!-- Streamlit-like chrome -->
+          <div class="app-demo-titlebar">
+            <div class="demo-dot r"></div>
+            <div class="demo-dot y"></div>
+            <div class="demo-dot g"></div>
+            <span class="app-demo-url" style="border:none;background:none">
+              🔬 WaferVision — Live Demo
+            </span>
+            <div class="app-demo-status" id="appDemoPlayPauseBtn" style="cursor: pointer; user-select: none;" title="Click to Pause/Resume Auto-Play">
+              <span class="app-demo-live-dot" id="appDemoStatusDot"></span>
+              <span id="appDemoStatusText">Auto-Playing</span>
+            </div>
+          </div>
+          <!-- Streamlit sidebar -->
+          <div class="app-demo-body">
+            <div class="app-demo-sidebar">
+              <div class="ads-logo">🔬 WaferVision</div>
+              <div class="ads-nav-item active" id="adsSideSingle">📷 Single Detection</div>
+              <div class="ads-nav-item" id="adsSideBatch">📦 Batch Processing</div>
+              <div class="ads-nav-item" id="adsSideCamera">🎥 Camera Detection</div>
+              <div class="ads-nav-item" id="adsSideHistory">📊 Inspection History</div>
+              <div class="ads-nav-item" id="adsSideAlerts">🔔 Alert System</div>
+              <div class="ads-divider"></div>
+              <div class="ads-model-select">
+                <div class="ads-label">Model</div>
+                <div class="ads-select-box" id="adsModelBox">ResNet18 (98.07%)</div>
+              </div>
+              <div class="ads-model-select">
+                <div class="ads-label">Email Alerts</div>
+                <div class="ads-toggle-track">
+                  <div class="ads-toggle-thumb"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Main content area -->
+            <div class="app-demo-main">
+              <div class="adm-header" id="admHeader">Single Image Detection</div>
+              <div class="adm-content" id="admContent">
+                <!-- PANEL: Single Detection -->
+                <div class="demo-panel" id="panelSingle" style="display: block;">
+                  <!-- Canvas-based animation area -->
+                  <canvas id="appDemoCanvas" width="820" height="480"></canvas>
+                </div>
+
+                <!-- PANEL: Batch Processing -->
+                <div class="demo-panel" id="panelBatch" style="display: none;">
+                  <div class="batch-container">
+                    <div class="batch-controls">
+                      <div class="batch-select-wrapper">
+                        <span class="ads-label">Select Batch Size</span>
+                        <select id="batchSizeSelect" class="batch-select">
+                          <option value="50">Small Batch (50 Wafers)</option>
+                          <option value="100" selected>Standard Batch (100 Wafers)</option>
+                          <option value="250">Production Lot (250 Wafers)</option>
+                        </select>
+                      </div>
+                      <button class="btn btn-primary" id="btnStartBatch">🔬 Process Batch Lot</button>
+                    </div>
+
+                    <!-- Progress Area -->
+                    <div class="batch-progress-area" id="batchProgressArea" style="display: none;">
+                      <div class="batch-progress-stats">
+                        <span>Status: <strong id="batchProgressStatus" style="color: var(--accent);">Scanning
+                            lot...</strong></span>
+                        <span id="batchProgressText">0 / 100 Wafers</span>
+                      </div>
+                      <div class="batch-progress-track">
+                        <div class="batch-progress-fill" id="batchProgressFill"></div>
+                      </div>
+                      <div class="batch-mini-grid" id="batchMiniGrid"></div>
+                    </div>
+
+                    <!-- Results Area -->
+                    <div class="batch-results-area" id="batchResultsArea" style="display: none;">
+                      <div class="batch-summary-cards">
+                        <div class="bscard">
+                          <div class="bsval" id="batchTotalCount">100</div>
+                          <div class="bslbl">Processed</div>
+                        </div>
+                        <div class="bscard normal">
+                          <div class="bsval" id="batchNormalCount">92</div>
+                          <div class="bslbl">Normal (Pass)</div>
+                        </div>
+                        <div class="bscard defect">
+                          <div class="bsval" id="batchDefectCount">8</div>
+                          <div class="bslbl">Defects (Fail)</div>
+                        </div>
+                        <div class="bscard rate">
+                          <div class="bsval" id="batchDefectRate" style="color: var(--danger);">8.0%</div>
+                          <div class="bslbl">Yield Loss Rate</div>
+                        </div>
+                      </div>
+
+                      <!-- Table of batch details -->
+                      <div class="batch-table-wrapper">
+                        <table class="batch-table">
+                          <thead>
+                            <tr>
+                              <th>Wafer ID</th>
+                              <th>Defect Pattern</th>
+                              <th>Confidence</th>
+                              <th>Latency</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody id="batchTableBody">
+                            <!-- Populated via JS -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANEL: Live Camera Inspection -->
+                <div class="demo-panel" id="panelCamera" style="display: none;">
+                  <div class="camera-container">
+                    <div class="camera-viewport-wrap">
+                      <div class="camera-viewport">
+                        <!-- Live canvas stream of wafers -->
+                        <canvas id="cameraFeedCanvas" width="500" height="320"></canvas>
+                        <div class="camera-overlay">
+                          <div class="camera-rec-badge"><span class="rec-dot"></span> LIVE SCANNER</div>
+                          <div class="camera-crosshairs"></div>
+                          <div class="camera-status-hud" id="cameraStatusHud">READY TO SCAN</div>
+                        </div>
+                      </div>
+                      <!-- Notification box overlay -->
+                      <div class="camera-notif-box" id="cameraNotifBox">
+                        <div class="notif-header">🔔 EagleSpark.ai Alert</div>
+                        <div class="notif-body" id="cameraNotifBody">Defect pattern detected! Sending notification
+                          email...</div>
+                      </div>
+                    </div>
+
+                    <div class="camera-sidebar">
+                      <div class="camera-controls">
+                        <button class="btn btn-primary" id="btnToggleCamera" style="width: 100%;">📹 Start Scan
+                          Stream</button>
+                        <button class="btn btn-outline" id="btnTriggerCameraDefect"
+                          style="width: 100%; margin-top: 10px;" disabled>⚠️ Simulate Defect</button>
+                      </div>
+                      <div class="camera-stats-card">
+                        <h4>Live Telemetry</h4>
+                        <div class="camera-hud-stat">
+                          <span>Processed:</span> <strong id="camTotalProcessed">0</strong>
+                        </div>
+                        <div class="camera-hud-stat">
+                          <span>Defectives:</span> <strong id="camDefectsFound" style="color: var(--danger);">0</strong>
+                        </div>
+                        <div class="camera-hud-stat">
+                          <span>Yield:</span> <strong id="camYieldRate">100%</strong>
+                        </div>
+                        <div class="camera-log-list" id="cameraLogList">
+                          <div class="camera-log-empty">Waiting for stream...</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANEL: Inspection History -->
+                <div class="demo-panel" id="panelHistory" style="display: none;">
+                  <div class="history-container">
+                    <div class="history-metrics-row">
+                      <div class="h-mcard">
+                        <span class="h-mtitle">Total Scanned</span>
+                        <span class="h-mval" id="histTotalScanned">1,482</span>
+                      </div>
+                      <div class="h-mcard">
+                        <span class="h-mtitle">Defectives</span>
+                        <span class="h-mval" id="histTotalDefects" style="color: var(--warning);">114</span>
+                      </div>
+                      <div class="h-mcard">
+                        <span class="h-mtitle">Yield Rate</span>
+                        <span class="h-mval" id="histYieldRate" style="color: var(--success);">92.31%</span>
+                      </div>
+                      <div class="h-mcard">
+                        <span class="h-mtitle">Avg Inference</span>
+                        <span class="h-mval">12 ms</span>
+                      </div>
+                    </div>
+
+                    <div class="history-chart-row">
+                      <div class="history-chart-card">
+                        <h4>📈 Yield Rate Trend (Last 7 Runs)</h4>
+                        <canvas id="historyChartCanvas" width="460" height="200"></canvas>
+                      </div>
+                      <div class="history-chart-card">
+                        <h4>🍩 Historical Defect Distribution</h4>
+                        <div class="history-dist-list" id="historyDistList">
+                          <!-- Populated by JS -->
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="history-table-section">
+                      <div class="history-table-header">
+                        <h4>📋 Inspection Database</h4>
+                        <button class="btn btn-outline" id="btnClearHistory"
+                          style="padding: 6px 12px; font-size: 0.75rem;">🧹 Clear Database</button>
+                      </div>
+                      <div class="history-table-wrapper">
+                        <table class="history-table">
+                          <thead>
+                            <tr>
+                              <th>Timestamp</th>
+                              <th>Wafer ID</th>
+                              <th>Defect Class</th>
+                              <th>Confidence</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody id="historyTableBody">
+                            <!-- Populated via JS -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PANEL: Smart Alert System -->
+                <div class="demo-panel" id="panelAlerts" style="display: none;">
+                  <div class="alerts-container">
+                    <div class="alerts-settings-grid">
+                      <div class="alerts-settings-card">
+                        <h4>⚙️ Alarm & Notification Rules</h4>
+
+                        <div class="setting-row">
+                          <div class="setting-info">
+                            <span class="setting-title">Auto-Email Operator</span>
+                            <span class="setting-desc">Send detailed PDF reports to supervisor on defect
+                              detection.</span>
+                          </div>
+                          <div class="setting-action">
+                            <div class="ads-toggle-track" id="settingEmailToggle"
+                              style="cursor: pointer; background: var(--success);">
+                              <div class="ads-toggle-thumb" id="settingEmailThumb" style="left: 18px;"></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="setting-row">
+                          <div class="setting-info">
+                            <span class="setting-title">Audible Alarm Beep</span>
+                            <span class="setting-desc">Trigger sound chime alert on critical defect detections.</span>
+                          </div>
+                          <div class="setting-action">
+                            <div class="ads-toggle-track" id="settingAudioToggle"
+                              style="cursor: pointer; background: var(--border);">
+                              <div class="ads-toggle-thumb" id="settingAudioThumb" style="left: 2px;"></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="setting-row">
+                          <div class="setting-info">
+                            <span class="setting-title">Database Retention</span>
+                            <span class="setting-desc">Keep wafer log records for 30 days before recycling.</span>
+                          </div>
+                          <div class="setting-action">
+                            <select class="batch-select" style="margin: 0; padding: 4px 8px; font-size: 0.75rem;">
+                              <option>30 Days</option>
+                              <option>90 Days</option>
+                              <option>Forever</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="setting-row">
+                          <div class="setting-info">
+                            <span class="setting-title">Confidence Alert Threshold</span>
+                            <span class="setting-desc">Trigger alert only if model certainty is above threshold: <strong
+                                id="threshVal">85%</strong></span>
+                          </div>
+                          <div class="setting-action-block" style="width: 100%; margin-top: 8px;">
+                            <input type="range" id="thresholdSlider" min="50" max="99" value="85"
+                              style="width: 100%; cursor: pointer;">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="alerts-settings-card">
+                        <h4>🚨 Critical Alert Broadcast Log</h4>
+                        <div class="alerts-log-wrapper">
+                          <table class="alerts-log-table">
+                            <thead>
+                              <tr>
+                                <th>Time</th>
+                                <th>Alert Event</th>
+                                <th>Channel</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody id="alertsLogBody">
+                              <!-- Populated by JS -->
+                            </tbody>
+                          </table>
+                        </div>
+                        <button class="btn btn-outline" id="btnExportAlerts"
+                          style="width: 100%; margin-top: 15px; font-size: 0.8rem;">📥 Export Alert Log (CSV)</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Step indicator -->
+              <div class="adm-steps" id="admSteps">
+                <div class="adm-step active" data-step="0"><span class="adm-step-num">1</span> Upload</div>
+                <div class="adm-step" data-step="1"><span class="adm-step-num">2</span> Analyze</div>
+                <div class="adm-step" data-step="2"><span class="adm-step-num">3</span> Classify</div>
+                <div class="adm-step" data-step="3"><span class="adm-step-num">4</span> Heatmap</div>
+                <div class="adm-step" data-step="4"><span class="adm-step-num">5</span> Report</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="app-demo-caption">
+          <span class="app-demo-loop-icon">🔄</span>
+          <span>Automated demo loops every ~12 seconds • Simulated output from actual WaferVision pipeline</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERFORMANCE -->
+  <section id="performance" style="background:var(--bg2)">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">⚡ Speed & Accuracy</div>
+        <h2 class="section-title">Performance <span class="gradient-text">Benchmarks</span></h2>
+        <p class="section-desc">Optimized for both CPU and GPU environments with ultra-low latency inference.</p>
+      </div>
+      <div class="perf-grid reveal">
+        <div class="perf-card">
+          <div class="icon">🎯</div>
+          <div class="num">98.07%</div>
+          <div class="label">Ensemble Accuracy</div>
+        </div>
+        <div class="perf-card">
+          <div class="icon">⚡</div>
+          <div class="num">&lt;50ms</div>
+          <div class="label">GPU Inference</div>
+        </div>
+        <div class="perf-card">
+          <div class="icon">🧠</div>
+          <div class="num">3</div>
+          <div class="label">Combined Models</div>
+        </div>
+        <div class="perf-card">
+          <div class="icon">📊</div>
+          <div class="num">811K</div>
+          <div class="label">Training Samples</div>
+        </div>
+      </div>
+      <div class="reveal" style="overflow-x:auto">
+        <table class="latency-table">
+          <thead>
+            <tr>
+              <th>Operation</th>
+              <th>CPU Time</th>
+              <th>GPU Time</th>
+              <th>Speedup</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ResNet18 Inference</td>
+              <td>85ms</td>
+              <td>12ms</td>
+              <td style="color:var(--success);font-weight:700">7.1×</td>
+            </tr>
+            <tr>
+              <td>Ensemble Inference</td>
+              <td>240ms</td>
+              <td>45ms</td>
+              <td style="color:var(--success);font-weight:700">5.3×</td>
+            </tr>
+            <tr>
+              <td>Grad-CAM Heatmap</td>
+              <td>150ms</td>
+              <td>30ms</td>
+              <td style="color:var(--success);font-weight:700">5.0×</td>
+            </tr>
+            <tr>
+              <td>Image Preprocessing</td>
+              <td>15ms</td>
+              <td>15ms</td>
+              <td>1.0×</td>
+            </tr>
+            <tr>
+              <td>Full Pipeline (Ensemble)</td>
+              <td>420ms</td>
+              <td>95ms</td>
+              <td style="color:var(--success);font-weight:700">4.4×</td>
+            </tr>
+            <tr>
+              <td>Batch (100 images)</td>
+              <td>38s</td>
+              <td>4.2s</td>
+              <td style="color:var(--success);font-weight:700">9.0×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- CONFUSION MATRIX & METRICS VISUALIZATION -->
+      <div class="metrics-viz reveal" id="metricsViz">
+        <div class="metrics-header">
+          <h3 class="metrics-title">📊 Model Evaluation <span class="gradient-text">Metrics</span></h3>
+          <div class="metrics-toggle-group">
+            <button class="metrics-toggle-btn active" data-view="matrix" id="btnMatrix">Confusion Matrix</button>
+            <button class="metrics-toggle-btn" data-view="charts" id="btnCharts">Class Metrics</button>
+          </div>
+        </div>
+
+        <!-- Confusion Matrix View -->
+        <div class="metrics-view active" id="viewMatrix">
+          <div class="cm-container">
+            <div class="cm-y-label">Predicted Label</div>
+            <div class="cm-canvas-wrap">
+              <div class="cm-x-labels" id="cmXLabels"></div>
+              <canvas id="confusionMatrix" width="520" height="520"></canvas>
+              <div class="cm-y-labels" id="cmYLabels"></div>
+            </div>
+            <div class="cm-x-label">True Label</div>
+          </div>
+          <div class="cm-legend">
+            <div class="cm-legend-bar"></div>
+            <div class="cm-legend-labels">
+              <span>0%</span><span>Low</span><span>Medium</span><span>High</span><span>100%</span>
+            </div>
+          </div>
+          <div class="cm-summary">
+            <div class="cm-summary-item">
+              <span class="cm-summary-value" id="cmOverallAcc">98.07%</span>
+              <span class="cm-summary-label">Overall Accuracy</span>
+            </div>
+            <div class="cm-summary-item">
+              <span class="cm-summary-value" id="cmMacroF1">0.971</span>
+              <span class="cm-summary-label">Macro F1-Score</span>
+            </div>
+            <div class="cm-summary-item">
+              <span class="cm-summary-value" id="cmWeightedF1">0.980</span>
+              <span class="cm-summary-label">Weighted F1-Score</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Per-Class Metrics View -->
+        <div class="metrics-view" id="viewCharts">
+          <div class="class-metrics-grid" id="classMetricsGrid">
+            <!-- Populated by JS -->
+          </div>
+          <div class="metrics-chart-legend">
+            <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span> Precision</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#8b5cf6"></span> Recall</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#10b981"></span> F1-Score</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge">📞 Get In Touch</div>
+        <h2 class="section-title">Need <span class="gradient-text">Assistance</span>?</h2>
+        <p class="section-desc">Our team is ready to help you integrate WaferVision into your semiconductor production
+          line.</p>
+      </div>
+      <div class="contact-grid reveal">
+        <div class="contact-card">
+          <div class="icon">📞</div>
+          <h3>Phone</h3>
+          <p>+91-6374111082</p>
+        </div>
+        <div class="contact-card">
+          <div class="icon">📧</div>
+          <h3>Email</h3>
+          <p>vishnusadasivan2006@gmail.com</p>
+        </div>
+        <div class="contact-card">
+          <div class="icon">🤖</div>
+          <h3>AI Assistant</h3>
+          <p>EagleSpark.ai — 24/7 Support</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo" style="font-size:1.2rem">
+            <svg viewBox="0 0 36 36" fill="none" width="30" height="30">
+              <circle cx="18" cy="18" r="16" stroke="url(#g2)" stroke-width="2.5" />
+              <circle cx="18" cy="18" r="8" stroke="url(#g2)" stroke-width="2" />
+              <circle cx="18" cy="18" r="3" fill="#6366f1" />
+              <defs>
+                <linearGradient id="g2" x1="0" y1="0" x2="36" y2="36">
+                  <stop stop-color="#3b82f6" />
+                  <stop offset="1" stop-color="#8b5cf6" />
+                </linearGradient>
+              </defs>
+            </svg>
+            WaferVision
+          </a>
+          <p>AI-Driven Defect Detection in Semiconductor Wafer Inspection. Powered by deep learning and engineered for
+            precision manufacturing.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Features</h4>
+          <a href="#app-preview" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(0); }">Single Detection</a>
+          <a href="#app-preview" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(1); }">Batch Processing</a>
+          <a href="#app-preview" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(2); }">Camera Detection</a>
+          <a href="#app-preview" onclick="if(window.switchWaferVisionDemoTab) { switchWaferVisionDemoTab(4); }">Alert System</a>
+        </div>
+        <div class="footer-col">
+          <h4>Technology</h4>
+          <a href="#models">ResNet18</a>
+          <a href="#models">Ensemble Model</a>
+          <a href="#dataset">WM-811K Dataset</a>
+          <a href="#performance">Performance</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#contact">Contact Us</a>
+          <a href="mailto:vishnusadasivan2006@gmail.com">Email Support</a>
+          <a href="javascript:void(0)" onclick="toggleChatbot()">EagleSpark.ai</a>
+          <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 WaferVision. All rights reserved.</span>
+        <span>Built for Semiconductor Excellence</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CHATBOT -->
+  <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open EagleSpark.ai assistant" onclick="toggleChatbot()">
+    <svg viewBox="0 0 24 24">
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l4.93-1.37A9.96 9.96 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 14h2v-2h-2v2zm0-4h2V7h-2v5z" />
+    </svg>
+  </button>
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      <div class="eaglespark-model-selector" id="eaglesparkModelSelector">
+        <div class="eaglespark-model-selector-btn" style="cursor: default; pointer-events: none;">
+          <span id="eaglesparkModelName">EagleSpark.ai PRO</span>
+        </div>
+      </div>
+      <div class="chatbot-header-actions">
+        <button class="chatbot-action-btn" id="chatbotNewChat" title="New Chat" onclick="startNewChat()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14m-7-7v14" />
+          </svg>
+        </button>
+        <button class="chatbot-close-btn" onclick="toggleChatbot()" title="Close chat">✕</button>
+      </div>
+    </div>
+
+    <div class="chatbot-messages" id="chatMessages">
+      <!-- Welcome screen -->
+      <div class="chat-welcome-container" id="chatWelcomeContainer">
+        <div class="chat-welcome-logo">
+          <svg viewBox="0 0 36 36" fill="none" width="40" height="40">
+            <circle cx="18" cy="18" r="16" stroke="url(#g3)" stroke-width="2.5"></circle>
+            <circle cx="18" cy="18" r="8" stroke="url(#g3)" stroke-width="2"></circle>
+            <circle cx="18" cy="18" r="3" fill="#6366f1"></circle>
+            <defs>
+              <linearGradient id="g3" x1="0" y1="0" x2="36" y2="36">
+                <stop stop-color="#3b82f6"></stop>
+                <stop offset="1" stop-color="#8b5cf6"></stop>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h2>How can I help you today?</h2>
+        <div class="chat-suggestions-grid">
+          <div class="chat-suggestion-card" onclick="fillPrompt('Tell me about Center wafer defects')">
+            <div class="title">🎯 Wafer Defects</div>
+            <div class="desc">Explain Center defects and 8 other classes</div>
+          </div>
+          <div class="chat-suggestion-card" onclick="fillPrompt('Explain ResNet18 vs Ensemble models')">
+            <div class="title">🧠 ML Models</div>
+            <div class="desc">Compare ResNet18 and Ensemble architectures</div>
+          </div>
+          <div class="chat-suggestion-card" onclick="fillPrompt('What is WaferVision accuracy?')">
+            <div class="title">📊 Performance</div>
+            <div class="desc">Show GPU latency and accuracy benchmarks</div>
+          </div>
+          <div class="chat-suggestion-card" onclick="fillPrompt('How do automated email alerts work?')">
+            <div class="title">📧 Alerting</div>
+            <div class="desc">How defect alerts trigger notifications</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chatbot-input-container">
+      <div class="chatbot-input-wrapper">
+        <textarea id="chatInput" placeholder="Message EagleSpark.ai..." rows="1"
+          onkeydown="handleChatInputKeydown(event)" oninput="adjustTextareaHeight(this)"></textarea>
+        <button id="chatSendBtn" onclick="sendChat()" aria-label="Send message" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="chatbot-disclaimer">EagleSpark.ai can make mistakes. Verify important info.</div>
+    </div>
+  </div>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
